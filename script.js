@@ -1,7 +1,8 @@
 var defX = 16;
 var defY = 16;
 var defColorMode = "standard";
-
+var rainbowPlaceholder = ["red", "orange", "yellow", "green", "blue", "indigo", "violet"];
+var rainbowIndex = 0;
 function initGrids(x, y, colorMode){
     
     let n = x*y;
@@ -28,12 +29,12 @@ function initGrids(x, y, colorMode){
     document.documentElement.style.setProperty('--column-config', 'repeat(' + y.toString() + ', 1fr)');
 }
 
-function resetGrid(){
+function resetGrid(colorMode = "standard"){
     let n = defX*defY;
     var color;
-    if(defColorMode == 'standard')
+    if(colorMode == 'standard')
         color = 'white';
-    else if(defColorMode == 'dark')
+    else if(colorMode == 'dark')
         color = 'black';
     else
         color = 'grey';
@@ -43,21 +44,42 @@ function resetGrid(){
             cell.style.backgroundColor = color;
         })
     }
+    defColorMode = colorMode;
 
 }
+function getRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
+
+function getRainbowColor(){
+    rainbowIndex = (rainbowIndex+1)%6;
+    return rainbowPlaceholder[rainbowIndex];
+}
+
 
 function rainbowMode(){
     defColorMode = 'rainbow';
-    initGrids(defX, defY, defColorMode);
+    resetGrid(defColorMode);
 
 }
 
 function darkMode(){
     defColorMode = 'dark';
-    resetGrid();
+    resetGrid(defColorMode);
+}
 
+function randomMode(){
+    defColorMode = 'random';
+    resetGrid(defColorMode);
 
 }
+
+
 
 function changeBGColor(frag, colorMode){
 
@@ -65,7 +87,10 @@ function changeBGColor(frag, colorMode){
         frag.style.backgroundColor = 'yellow';
     else if(colorMode == "dark")
         frag.style.backgroundColor = 'lightblue';
-
+    else if(colorMode == "random")
+        frag.style.backgroundColor = getRandomColor();
+    else
+        frag.style.backgroundColor = getRainbowColor();
 }
 
 initGrids(16,16);
@@ -86,7 +111,10 @@ buttons.forEach((button) => {
             resetGrid();
         else if(button.value == 'rainbow')
             rainbowMode();
-        else
+        else if(button.value =='dark')
             darkMode();
+        else
+            randomMode();
+
     })
 })
