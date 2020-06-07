@@ -3,13 +3,14 @@ var defY = 16;
 var defColorMode = "standard";
 var rainbowPlaceholder = ["red", "orange", "yellow", "green", "blue", "indigo", "violet"];
 var rainbowIndex = 0;
+var buttonPlaceHolder = null;
 function initGrids(x, y, colorMode){
     
     let n = x*y;
     defX = x;
     defY = y;
     var color;
-    if(colorMode == 'standard')
+    if(colorMode == 'standard' || colorMode == 'random')
         color = 'white';
     else if(colorMode == 'dark')
         color = 'black';
@@ -32,12 +33,21 @@ function initGrids(x, y, colorMode){
 function resetGrid(colorMode = "standard"){
     let n = defX*defY;
     var color;
-    if(colorMode == 'standard')
+    if(colorMode == 'standard'|| colorMode == 'random'){
         color = 'white';
+        const container = document.querySelectorAll('button');
+        container.forEach((button) => {
+            button.classList.remove('darkModeForButtons');
+    })
+    document.documentElement.style.setProperty('--border-color', '#a34040');
+    }
+
     else if(colorMode == 'dark')
         color = 'black';
-    else
+    else{
         color = 'grey';
+        document.documentElement.style.setProperty('--border-color', '#7DF9FF');
+    }
     for(let i = 0; i < n; i++){
         const container = document.querySelectorAll('.cell');
         container.forEach((cell) => {
@@ -65,12 +75,17 @@ function getRainbowColor(){
 function rainbowMode(){
     defColorMode = 'rainbow';
     resetGrid(defColorMode);
-
+    
 }
 
 function darkMode(){
     defColorMode = 'dark';
     resetGrid(defColorMode);
+    const container = document.querySelectorAll('button');
+    container.forEach((button) => {
+        button.classList.add('darkModeForButtons');
+    })
+    document.documentElement.style.setProperty('--border-color', '#474545');
 }
 
 function randomMode(){
@@ -84,7 +99,7 @@ function randomMode(){
 function changeBGColor(frag, colorMode){
 
     if(colorMode == "standard")
-        frag.style.backgroundColor = 'yellow';
+        frag.style.backgroundColor = '#3b1812';
     else if(colorMode == "dark")
         frag.style.backgroundColor = 'lightblue';
     else if(colorMode == "random")
@@ -93,7 +108,7 @@ function changeBGColor(frag, colorMode){
         frag.style.backgroundColor = getRainbowColor();
 }
 
-initGrids(16,16);
+initGrids(16,16, "standard");
 
 const cell = document.querySelectorAll('.cell');
 cell.forEach((frag) => {
@@ -106,7 +121,9 @@ cell.forEach((frag) => {
 const buttons = document.querySelectorAll('button');
 buttons.forEach((button) => {
     button.addEventListener('click', (e) => {
-        console.log('HOVERED');
+        if(buttonPlaceHolder)
+            buttonPlaceHolder.classList.remove('sizeIncrease');
+        button.classList.add('sizeIncrease');
         if(button.value == 'reset')
             resetGrid();
         else if(button.value == 'rainbow')
@@ -115,6 +132,8 @@ buttons.forEach((button) => {
             darkMode();
         else
             randomMode();
+        
+        buttonPlaceHolder = button;
 
     })
 })
