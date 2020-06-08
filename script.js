@@ -155,13 +155,13 @@ function clickDragMode(){
     const container = document.querySelector('.clickAndDragButton');
     if(clickAndDragFlag){
         clickAndDragFlag = false;
-        container.textContent = 'Click and Drag : Off';
+        container.textContent = 'Hover Mode';
 
     }
 
     else{
         clickAndDragFlag = true;
-        container.textContent = 'Click and Drag : On';
+        container.textContent = 'Click and Drag Mode';
     
     }
     initDraw(false);
@@ -182,6 +182,7 @@ function clickAndDragDraw(cell, press){
 
     if(press == 1){
         clickAndDragPress = true;
+        changeBGColor(cell, defColorMode);
     }
     else if(press == 3){
         clickAndDragPress = false;
@@ -288,7 +289,7 @@ function changeBGColor(frag, colorMode){
 }
 
 initGrids(16,16, "standard");
-initDraw(true);
+clickDragMode();
 
 const buttons = document.querySelectorAll('button');
 buttons.forEach((button) => {
