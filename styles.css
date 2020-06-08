@@ -4,6 +4,7 @@
     --tiny-shadow: 4px 4px 2px 0 rgba(0, 0, 0, 0.8);
     --animate-right: translateX(20px);
     --border-color: #a34040;
+    --animate-left: translateX(-20px);
 }
 
 .darkModeForButtons{
@@ -74,17 +75,25 @@ li{
 li{
     box-shadow: var(--tiny-shadow);
 }
-li:hover{
+.verticalList>li:hover{
     transform: var(--animate-right);
+}
+.verticalList2>li:hover{
+    transform: var(--animate-left);
 }
 .sizeIncrease{
     animation-name: enlarge;
-    animation-duration: 1s;
+    animation-duration: 1.5s;
     animation-iteration-count: 1;
-    border: 3px solid gold;
+    border: 3px solid red;
 
 }
 @keyframes enlarge{
     from {transform:scale(1.1);}
     to {transform:scale(1);}
+}
+.verticalList2{
+    position: fixed;
+    right: 0;
+    top: 20%;
 }

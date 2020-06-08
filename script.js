@@ -4,6 +4,9 @@ var defColorMode = "standard";
 var rainbowPlaceholder = ["red", "orange", "yellow", "green", "blue", "indigo", "violet"];
 var rainbowIndex = 0;
 var buttonPlaceHolder = null;
+var currentBG = 'white';
+var clickAndDragFlag = false;
+var eraseFlag = false;
 function initGrids(x, y, colorMode){
     
     let n = x*y;
@@ -35,6 +38,7 @@ function resetGrid(colorMode = "standard"){
     var color;
     if(colorMode == 'standard'|| colorMode == 'random'){
         color = 'white';
+        currentBG = 'white';
         const container = document.querySelectorAll('button');
         container.forEach((button) => {
             button.classList.remove('darkModeForButtons');
@@ -42,9 +46,12 @@ function resetGrid(colorMode = "standard"){
     document.documentElement.style.setProperty('--border-color', '#a34040');
     }
 
-    else if(colorMode == 'dark')
+    else if(colorMode == 'dark'){
         color = 'black';
+        currentBG = 'black';
+    }
     else{
+        currentBG = 'grey';
         color = 'grey';
         document.documentElement.style.setProperty('--border-color', '#7DF9FF');
     }
@@ -74,12 +81,14 @@ function getRainbowColor(){
 
 function rainbowMode(){
     defColorMode = 'rainbow';
+    currentBG = 'grey';
     resetGrid(defColorMode);
     
 }
 
 function darkMode(){
     defColorMode = 'dark';
+    currentBG = 'black';
     resetGrid(defColorMode);
     const container = document.querySelectorAll('button');
     container.forEach((button) => {
@@ -94,29 +103,103 @@ function randomMode(){
 
 }
 
+function eraseMode(){
+    const container = document.querySelector('.eraserButton');
+    if(eraseFlag){
+        container.textContent = 'Eraser : Off';
+        eraseFlag = false;
+    }
 
+    else{
+        container.textContent = 'Eraser : On';
+        eraseFlag = true;
+    
+    }
 
-function changeBGColor(frag, colorMode){
-
-    if(colorMode == "standard")
-        frag.style.backgroundColor = '#3b1812';
-    else if(colorMode == "dark")
-        frag.style.backgroundColor = 'lightblue';
-    else if(colorMode == "random")
-        frag.style.backgroundColor = getRandomColor();
-    else
-        frag.style.backgroundColor = getRainbowColor();
 }
 
-initGrids(16,16, "standard");
+function clickDragMode(){
+    const container = document.querySelector('.clickAndDragButton');
+    if(clickAndDragFlag){
+        clickAndDragFlag = false;
+        container.textContent = 'Click Mode : Off';
 
-const cell = document.querySelectorAll('.cell');
-cell.forEach((frag) => {
-    frag.addEventListener('mouseover', (e) => {
-        changeBGColor(frag, defColorMode);
+    }
+
+    else{
+        clickAndDragFlag = true;
+        container.textContent = 'Click Mode : On';
+    
+    }
+    initDraw(false);
+    
+}
+
+function initDraw(initial){
+    
+    
+    if(clickAndDragFlag){
+        var old_element = document.getElementsByClassName('grid');
+        for(var i = 0; i < old_element.length; i++) {
+            var newElement = old_element[i].cloneNode(true);
+            old_element[i].parentNode.replaceChild(newElement, old_element[i]);
+
+        }
         
-    })
-})
+        
+        const cells = document.querySelectorAll('.cell');
+        cells.forEach((cell) => {
+
+
+            cell.addEventListener('click', (e) => {
+                changeBGColor(cell, defColorMode);
+                
+            });
+
+            
+
+        })
+
+
+    }
+    else{
+        if(!initial){
+            var old_element = document.getElementsByClassName('grid');
+            for(var i = 0; i < old_element.length; i++) {
+                var newElement = old_element[i].cloneNode(true);
+                old_element[i].parentNode.replaceChild(newElement, old_element[i]);
+            }
+        }
+        const cells = document.querySelectorAll('.cell');
+        cells.forEach((cell) => {
+
+            cell.addEventListener('mouseover', (e) => {
+
+                changeBGColor(cell, defColorMode);
+            })
+        })
+    }
+}
+
+
+function changeBGColor(frag, colorMode){    
+    if(eraseFlag){
+        frag.style.backgroundColor = currentBG;
+    }
+    else{
+        if(colorMode == "standard")
+            frag.style.backgroundColor = '#3b1812';
+        else if(colorMode == "dark")
+            frag.style.backgroundColor = 'lightblue';
+        else if(colorMode == "random")
+            frag.style.backgroundColor = getRandomColor();
+        else if(colorMode == 'rainbow')
+            frag.style.backgroundColor = getRainbowColor();
+        }
+    }
+
+initGrids(16,16, "standard");
+initDraw(true);
 
 const buttons = document.querySelectorAll('button');
 buttons.forEach((button) => {
@@ -130,10 +213,15 @@ buttons.forEach((button) => {
             rainbowMode();
         else if(button.value =='dark')
             darkMode();
-        else
+        else if(button.value == 'random')
             randomMode();
+        else if(button.value == 'eraser')
+            eraseMode();
+        else if(button.value == 'clickdrag')
+            clickDragMode();
+            
         
         buttonPlaceHolder = button;
 
     })
-})
+})  
