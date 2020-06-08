@@ -1,10 +1,16 @@
-
 :root{
     --column-config: repeat(5, 1fr);
     --tiny-shadow: 4px 4px 2px 0 rgba(0, 0, 0, 0.8);
     --animate-right: translateX(20px);
     --border-color: #a34040;
     --animate-left: translateX(-20px);
+    --title-color: #731300;
+    --bg-url: url("resources//standardBG.jpg")
+}
+@font-face {
+    font-family: childhoodFont;
+    src: url(resources//ChildhoodMemories.ttf);
+    
 }
 
 .darkModeForButtons{
@@ -14,6 +20,14 @@
 .title{
   text-align: center;
   position: relative;
+  font-family: childhoodFont;
+  font-size: 35px;
+  font-style: normal;
+  font-weight: bolder;
+  color: var(--title-color);
+  margin-top : auto;
+  letter-spacing: 10px;
+  text-shadow: 4px 4px 4px black;
 }
 .optionsList{
     margin-top:5%;
@@ -55,6 +69,9 @@ button{
     width: 280px;
     height: 50px;
     transition: all 0.2s;
+    font-family: childhoodFont;
+    font-weight: bold;
+    letter-spacing: 4px;
 
 }
 ul {
@@ -63,7 +80,8 @@ ul {
     width: 300px;
 }
 li{
-    font: normal 18px sans-serif;
+    font-size: 18px;
+    font-family: childhoodFont;
     padding: 0px;
     transition: 0.4s;
     margin: 10px;
@@ -96,4 +114,8 @@ li{
     position: fixed;
     right: 0;
     top: 20%;
+}
+body{
+    background-image: var(--bg-url);
+    transition: background-image 5s ease-in-out;
 }

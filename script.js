@@ -57,6 +57,10 @@ function resetGrid(colorMode = "standard"){
     else{
         currentBG = 'grey';
         color = 'grey';
+        const container = document.querySelectorAll('button');
+        container.forEach((button) => {
+            button.classList.remove('darkModeForButtons');
+        })
         document.documentElement.style.setProperty('--border-color', '#7DF9FF');
     }
     for(let i = 0; i < n; i++){
@@ -65,7 +69,9 @@ function resetGrid(colorMode = "standard"){
             cell.style.backgroundColor = color;
         })
     }
+    
     defColorMode = colorMode;
+    changeBGImg();
 
 }
 function getRandomColor() {
@@ -75,6 +81,23 @@ function getRandomColor() {
         color += letters[Math.floor(Math.random() * 16)];
     }
     return color;
+}
+
+function changeBGImg(){
+    
+    if(defColorMode == 'standard'||defColorMode == 'random'){
+        document.documentElement.style.setProperty('--title-color', '#731300');
+        document.documentElement.style.setProperty('--bg-url', 'url("resources//standardBG.jpg")');
+    }
+    else if(defColorMode == 'dark'){
+        document.documentElement.style.setProperty('--title-color', '#448285');
+        document.documentElement.style.setProperty('--bg-url', 'url("resources//' + defColorMode + 'BG.jpg")');
+    }
+    else if(defColorMode == 'rainbow'){
+        document.documentElement.style.setProperty('--title-color', '#f6fa00');
+        document.documentElement.style.setProperty('--bg-url', 'url("resources//' + defColorMode + 'BG.jpg")');
+    }
+    
 }
 
 function getRainbowColor(){
@@ -88,6 +111,7 @@ function rainbowMode(){
     currentBG = 'grey';
     resetGrid(defColorMode);
     
+    
 }
 
 function darkMode(){
@@ -99,11 +123,13 @@ function darkMode(){
         button.classList.add('darkModeForButtons');
     })
     document.documentElement.style.setProperty('--border-color', '#474545');
+    
 }
 
 function randomMode(){
     defColorMode = 'random';
     resetGrid(defColorMode);
+    
 
 }
 
@@ -121,6 +147,8 @@ function eraseMode(){
     }
 
 }
+
+
 
 function clickDragMode(){
     const container = document.querySelector('.clickAndDragButton');
