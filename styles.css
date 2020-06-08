@@ -117,5 +117,5 @@ li{
 }
 body{
     background-image: var(--bg-url);
-    transition: background-image 5s ease-in-out;
+    transition: background-image 1s ease-in-out;
 }
