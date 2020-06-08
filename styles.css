@@ -113,9 +113,12 @@ li{
 .verticalList2{
     position: fixed;
     right: 0;
-    top: 20%;
+    top: 16%;
 }
 body{
     background-image: var(--bg-url);
     transition: background-image 1s ease-in-out;
+}
+#canvas{
+    display: none;
 }

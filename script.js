@@ -7,6 +7,7 @@ var buttonPlaceHolder = null;
 var currentBG = 'white';
 var clickAndDragFlag = false;
 var eraseFlag = false;
+var clickAndDragPress = false;
 function initGrids(x, y, colorMode){
     
     let n = x*y;
@@ -154,26 +155,64 @@ function clickDragMode(){
     const container = document.querySelector('.clickAndDragButton');
     if(clickAndDragFlag){
         clickAndDragFlag = false;
-        container.textContent = 'Click Mode : Off';
+        container.textContent = 'Click and Drag : Off';
 
     }
 
     else{
         clickAndDragFlag = true;
-        container.textContent = 'Click Mode : On';
+        container.textContent = 'Click and Drag : On';
     
     }
     initDraw(false);
     
 }
 function modifyGridSize(){
-    dimension = parseInt(prompt('Enter new Grid Size (1-100)'));
-    if(dimension < 1 || dimension > 100 || isNaN(dimension)){
+    dimension = parseInt(prompt('Enter new Grid Size (1-50)'));
+    if(dimension < 1 || dimension > 50 || isNaN(dimension)){
         alert('Incorrect input, using default size (16)');
         dimension = 16;
     }
     initGrids(dimension, dimension, defColorMode);
     initDraw(true);
+
+}
+
+function clickAndDragDraw(cell, press){
+
+    if(press == 1){
+        clickAndDragPress = true;
+    }
+    else if(press == 3){
+        clickAndDragPress = false;
+
+    }
+    else{
+        if(clickAndDragPress){
+            changeBGColor(cell, defColorMode);
+        }
+    }
+
+}
+
+function saveSketch(){
+    var t = document.getElementById('canvas');
+    var c = t.getContext('2d');
+    const container = document.getElementsByClassName('cell');
+    var iter = 0;
+    const w = t.width/defX;
+    const h = t.height/defY;
+
+    for(let i = 0; i < defX; i++){
+        for(let j = 0; j < defY; j++){
+            c.fillStyle = container[iter].style.backgroundColor;
+            let x = j*700/defX;
+            let y = i*600/defY;
+            c.fillRect(x,y,w,h);
+            iter++;
+        }
+    }
+    window.open(document.getElementById('canvas').toDataURL());
 
 }
 
@@ -192,11 +231,19 @@ function initDraw(initial){
         const cells = document.querySelectorAll('.cell');
         cells.forEach((cell) => {
 
+            cell.addEventListener('mouseover', (e) => {
+                clickAndDragDraw(cell, 2);
 
-            cell.addEventListener('click', (e) => {
-                changeBGColor(cell, defColorMode);
+            });
+
+            cell.addEventListener('mousedown', (e) => {
+                clickAndDragDraw(cell, 1);
+            
                 
             });
+            cell.addEventListener('mouseup', (e) => {
+                clickAndDragDraw(cell, 3);
+            })
 
             
 
@@ -237,8 +284,8 @@ function changeBGColor(frag, colorMode){
             frag.style.backgroundColor = getRandomColor();
         else if(colorMode == 'rainbow')
             frag.style.backgroundColor = getRainbowColor();
-        }
     }
+}
 
 initGrids(16,16, "standard");
 initDraw(true);
@@ -263,6 +310,8 @@ buttons.forEach((button) => {
             clickDragMode();
         else if(button.value == 'gridsize')
             modifyGridSize();
+        else if(button.value == 'save')
+            saveSketch();
             
         
         buttonPlaceHolder = button;
