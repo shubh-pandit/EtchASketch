@@ -19,9 +19,13 @@ function initGrids(x, y, colorMode){
         color = 'black';
     else
         color = 'grey';
+
+    const container = document.querySelector('.grid');
+    while (container.firstChild) {
+        container.removeChild(container.firstChild);
+    }
     
     for(let i = 0; i < n; i++){
-        const container = document.querySelector('.grid');
         let cell = document.createElement("div");
         cell.style.backgroundColor = color;
         container.appendChild(cell).classList.add('cell');
@@ -134,6 +138,16 @@ function clickDragMode(){
     initDraw(false);
     
 }
+function modifyGridSize(){
+    dimension = parseInt(prompt('Enter new Grid Size (1-100)'));
+    if(dimension < 1 || dimension > 100 || isNaN(dimension)){
+        alert('Incorrect input, using default size (16)');
+        dimension = 16;
+    }
+    initGrids(dimension, dimension, defColorMode);
+    initDraw(true);
+
+}
 
 function initDraw(initial){
     
@@ -219,6 +233,8 @@ buttons.forEach((button) => {
             eraseMode();
         else if(button.value == 'clickdrag')
             clickDragMode();
+        else if(button.value == 'gridsize')
+            modifyGridSize();
             
         
         buttonPlaceHolder = button;
